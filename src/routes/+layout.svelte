@@ -43,11 +43,11 @@
 			symbol: "queue_music",
 			pathname: "/"
 		},
-		{
-			label: "Manage",
-			symbol: "shield_person",
-			pathname: "/manage"
-		}
+		// {
+		// 	label: "Manage",
+		// 	symbol: "shield_person",
+		// 	pathname: "/manage"
+		// }
 	] : [{
 			label: "Queue",
 			symbol: "queue_music",

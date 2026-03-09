@@ -154,6 +154,18 @@ export default class Spotify {
         }
     }
 
+    async getTrackById(track_id: string): Promise<SpotifyTrack | null> {
+        try {
+            const res = await this.get(`/tracks/${track_id}`);
+
+            if (!res || !res.data || res.status !== 200) return null;
+            return res.data as SpotifyTrack;
+        } catch (e) {
+            console.log(e)
+            return null;
+        }
+    }
+
     formatArtists(artists: SpotifyArtist[]): string {
         return artists.map(a => a.name).join(", ");
     }
