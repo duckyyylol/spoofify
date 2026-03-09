@@ -4,7 +4,7 @@ import { session } from "./schema";
 import { eq } from "drizzle-orm";
 
 export function setSessionData(data: typeof session.$inferInsert): TokenResponse {
-    if((db.select().from(session).where(eq(session.access_token, data.access_token)).get() || null) !== null) {
+    if((db.select().from(session).where(eq(session.access_token, data.access_token)).get() || null) === null) {
         return db.insert(session).values(data).returning().get();
     } else {
         return db.update(session).set(data).returning().get();
