@@ -25,7 +25,7 @@
 ### !queue   
 > Displays the size of the track queue   
 >
-> > - **Aliases: **\`!q\`, \`!songlist\`, \`!tracklist\` ** **   
+> > - **Aliases: **\`!q\`, \`!songlist\`, \`!tracklist\`  
 > > - **Usage: **!queue   
 > > - **Example: **!tracklist   
    
