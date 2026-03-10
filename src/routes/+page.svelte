@@ -3,14 +3,13 @@
     import {
         ButtonCard,
         Column,
-        getUserData,
         Heading,
         InfoCard,
     } from "duckylib";
     import { onMount } from "svelte";
-    import defaultImage from "$lib/assets/favicon.svg";
+    import defaultImage from "$lib/assets/favicon.png";
 
-    let user = $state(getUserData());
+    // let user = $state(getUserData());
 
     async function fetchQueue(): Promise<SearchedTrack[]> {
         let q: SearchedTrack[] = await (await fetch(`/api/queue`)).json();

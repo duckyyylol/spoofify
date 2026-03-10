@@ -1,20 +1,29 @@
 <script lang="ts">
     import { browser } from '$app/environment';
     import { page } from '$app/state';
-	import favicon from '$lib/assets/favicon.svg';
-    import { getTheme, getUserData, Header, UserRoles, Website } from 'duckylib';
+	import favicon from '$lib/assets/favicon.png';
+    import { getTheme, Header, UserRoles, Website, type Auth } from 'duckylib';
+    import { onMount } from 'svelte';
 
 	let { children } = $props();
 
 	let theme = $state(getTheme());
 
+	let user: Auth.User | null = $state(null);
+
+	onMount(() => {
+		// console.log(window.localStorage.getItem("userData"))
+		if(browser) user = JSON.parse(["null", "undefined"].includes(window.localStorage.getItem("userData") || "null") ? "{}" : window.localStorage.getItem("userData") as string) as Auth.User | undefined || null;
+	})
+
 </script>
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
+	<title>Spoofify | {page.url.pathname.includes("overlays") ? "Overlay" : "Queue"}</title>
 </svelte:head>
 
-{#if page.url.pathname.includes("overlays")}
+{#if page.url.pathname.startsWith("/overlays")}
 	<!-- <Website options={{theme: theme}}> -->
 	<div class="dark" style="background-color: transparent; color: var(--text);">
 		{@render children()}
@@ -35,19 +44,19 @@
 		if(browser) window.location.replace(`/auth/logout`)
 	}}
 
-	defaultNav={false}
+	defaultNav={true}
 
-	nav={getUserData()?.role === UserRoles.ADMIN ? [
+	nav={(user && (user !== undefined || user !== null) && (user?.role === UserRoles.ADMIN && user?.role !== undefined)) ? [
 		{
 			label: "Queue",
 			symbol: "queue_music",
 			pathname: "/"
 		},
-		// {
-		// 	label: "Manage",
-		// 	symbol: "shield_person",
-		// 	pathname: "/manage"
-		// }
+		{
+			label: "Overlays",
+			symbol: "shield_person",
+			pathname: "/broadcaster/stream"
+		}
 	] : [{
 			label: "Queue",
 			symbol: "queue_music",

@@ -1,17 +1,21 @@
 <script lang="ts">
     import { Text } from "duckylib";
     import { onMount } from "svelte";
+    import defaultImage from "$lib/assets/favicon.png"
 
     let nowPlaying: SearchedTrack | null = $state(null);
 
+    async function fetchNowPlaying(): Promise<SearchedTrack | null> {
+        return (await (await fetch(`/api/spotify/now-playing`)).json()) || null;
+    }
+
     onMount(async () => {
-        nowPlaying =
-            (await (await fetch(`/api/spotify/now-playing`)).json()) || null;
+        nowPlaying = await fetchNowPlaying();
+            
 
         setInterval(async () => {
-            let np = (await (await fetch(`/api/spotify/now-playing`)).json()) ||
-                null;
-            if(np.id !== nowPlaying?.id) {
+            let np = await fetchNowPlaying()
+            if(np && np.id !== nowPlaying?.id) {
                 switching = true;
             }
             setTimeout(() => {
@@ -24,10 +28,28 @@
     });
 
     let switching = $state(false);
+
+
+    let animations: {[key: string]: {in: string; out: string;}} = {
+        "flip": {
+            in: "flipIn",
+            out: "flipOut"
+        },
+        "turn": {
+            in: "turnIn",
+            out: "turnOut"
+        },
+        "slide": {
+            in: "in",
+            out: "out"
+        }
+    }
+
+    let animation = $state("turn")
 </script>
 
-<div id="main" class="{switching ? "out" : "in"}">
-    <img src={nowPlaying?.imageUrl} alt="" />
+<div id="main" class="{switching ? animations[animation].out : animations[animation].in}">
+    <img src={nowPlaying?.imageUrl || defaultImage} alt="" style={nowPlaying?.imageUrl ? "box-shadow: 2px 4px 10.9px 0 var(--shadow);" : ""} />
     <div id="details-outer">
         <p id="label">NOW PLAYING</p>
         <div id="details-inner">
@@ -79,6 +101,56 @@
         }
     }
 
+    @keyframes pageTurn1 {
+        0% {
+            transform: rotateY(-90deg);
+            transform-origin: 0;
+        }
+
+        100% {
+            transform: rotateY(0);
+        }
+    }
+
+    @keyframes pageTurn2 {
+        0% {
+            transform: rotateY(0);
+        }
+
+        100% {
+            transform-origin: 0;
+            transform: rotateY(-90deg);
+        }
+    }
+
+    @keyframes flipOut {
+        0% {
+            transform-origin: 0;
+            transform: rotate(0deg) translateX(0px) translateY(0px);
+            opacity: 1;
+        }
+
+        100% {
+            transform-origin: 0;
+            transform: rotate(-90deg) translateX(150px) translateY(20px);
+            opacity: 0;
+        }
+    }
+
+    @keyframes flipIn {
+        0% {
+            transform-origin: 0;
+            transform: rotate(-90deg) translateX(150px) translateY(20px);
+            opacity: 0;
+        }
+
+        100% {
+            transform-origin: 0;
+            transform: rotate(0deg) translateX(0px) translateY(0px);
+            opacity: 1;
+        }
+    }
+
     .in {
         animation: 1s slideIn forwards ease-in-out;
     }
@@ -87,16 +159,31 @@
         animation: 1s slideOut forwards ease-in-out;
     }
 
+    .turnIn {
+        animation: 1s pageTurn1 forwards ease-in-out;
+    }
+
+    .turnOut {
+        animation: 1s pageTurn2 forwards ease-in-out;
+    }
+
+    .flipOut {
+        animation: 0.33s flipOut forwards ease-out;
+    }
+
+    .flipIn {
+        animation: 0.5s flipIn forwards ease-out;
+    }
+
     .spin {
         animation: 1s spin forwards ease-in-out;
-
     }
 
     :root {
         --purple-1: rgb(144, 85, 161, 0.7);
         --purple-2: rgb(174, 79, 201, 0.7);
         --text-pink: #e7aaff;
-        --shadow: #561269;
+        --shadow: #561269b9;
         --stroke: #27132c;
     }
 
@@ -110,17 +197,17 @@
         aspect-ratio: 1/1;
 
         border-radius: 4px;
-        box-shadow: 2px 4px 10.9px 0 var(--shadow);
+        
     }
 
     #label {
-        font-size: 1.5em;
+        font-size: 1.33em;
         color: var(--text-pink);
     }
 
     #title {
         color: white;
-        font-size: 1.8em;
+        font-size: 1.9em;
         width: 100%;
 
         text-overflow: ellipsis;

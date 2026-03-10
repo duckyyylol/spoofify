@@ -76,8 +76,11 @@ export default class Spotify {
             if (!(res.data as TokenResponse)?.access_token) return null;
 
             let token = res.data as TokenResponse;
+            if(!token.refresh_token) token.refresh_token = refresh_token;
 
-            setSessionData(token)
+            console.log("REFRESHED", token)
+
+            await setSessionData(token)
             let expires_in = token.expires_in;
 
             cookies.set("token-0", token.access_token, { path: "/", maxAge: expires_in, expires: new Date(Date.now() + (expires_in * 1000)) })

@@ -34,7 +34,7 @@ export const GET = async ({ cookies, fetch, url }): Promise<Response> => {
             // console.log("USER", tokenUser)
             
             if (tokenUser) {
-                setSessionData(token)
+                await setSessionData(token)
                 let expires_in = token.expires_in;
 
                 cookies.set("token-0", token.access_token, { path: "/", maxAge: expires_in, expires: new Date(Date.now() + (expires_in * 1000)) })
@@ -80,7 +80,7 @@ export const GET = async ({ cookies, fetch, url }): Promise<Response> => {
 
                     if (tokenUser) {
                         let expires_in = token.expires_in;
-                        setSessionData(token)
+                        await setSessionData(token)
 
                         cookies.set("token-0", token.access_token, { path: "/", maxAge: expires_in, expires: new Date(Date.now() + (expires_in * 1000)) })
                         cookies.set("token-r", token.refresh_token, { path: "/", maxAge: expires_in, expires: new Date(Date.now() + (expires_in * 1000)) })

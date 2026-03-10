@@ -23,9 +23,9 @@
         <Row justifyContent="space-between" alignItems="center" textWrap={true}>
             <p id="title"><a href="https://open.spotify.com/track/{track.uri.split(":")[2]}" target="_blank">{track.title}</a></p>
             <!-- <p id="sep"></p> -->
-            <!-- {#if tabletQuery.current} -->
+            {#if !tabletQuery.current}
             <p id="artist">{track.artist}</p>
-            <!-- {/if} -->
+            {/if}
         </Row>
         </Row>
     </Row>

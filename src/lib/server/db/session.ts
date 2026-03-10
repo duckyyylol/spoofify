@@ -3,12 +3,12 @@ import { db } from ".";
 import { session } from "./schema";
 import { eq } from "drizzle-orm";
 
-export function setSessionData(data: typeof session.$inferInsert): TokenResponse {
-    if((db.select().from(session).where(eq(session.access_token, data.access_token)).get() || null) === null) {
-        return db.insert(session).values(data).returning().get();
-    } else {
-        return db.update(session).set(data).returning().get();
-    }
+export async function setSessionData(data: typeof session.$inferInsert): Promise<TokenResponse> {
+    console.log("SET SESSION DATA", data)
+    return db.transaction((tx) => {
+        tx.delete(session).run();
+        return tx.insert(session).values(data).returning().get();
+    })
 }
 
 export async function deleteSessionData(access_token: string): Promise<RunResult> {
