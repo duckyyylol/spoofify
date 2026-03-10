@@ -12,7 +12,7 @@
 > Adds a song to the queue based on a search query.   
 >
 > > - **Aliases: **\`!sr\`, \`!addsong\`, \`!play\`, \`!request\`    
-> > - **Usage: **!songrequest <song>   
+> > - **Usage: **!songrequest \<song\>   
 > > - **Example: **!request hotel california   
    
 ### !nowplaying   
