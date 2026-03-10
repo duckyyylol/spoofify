@@ -140,7 +140,7 @@ export default class Spotify {
             if (!res || res.status !== 200) return false;
             return true;
         } catch (e) {
-            // console.log(e)
+            console.log(e)
             return false;
         }
     }

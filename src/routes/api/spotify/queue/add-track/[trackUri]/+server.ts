@@ -50,9 +50,7 @@ export const POST = async ({ params, cookies, request }): Promise<Response> => {
         }
     } catch (e) {
         console.log(e)
-        try {
-
-        } catch (err) { }
+        
         return json(false)
     }
 }
