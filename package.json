@@ -33,6 +33,8 @@
 		"@types/axios": "^0.9.36",
 		"axios": "^1.13.6",
 		"better-sqlite3": "^12.6.2",
-		"duckylib": "^0.1.15"
+		"duckylib": "^0.1.15",
+		"mdsvex": "^0.12.7",
+		"shiki": "^4.0.2"
 	}
 }

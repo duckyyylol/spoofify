@@ -53,10 +53,10 @@
 			pathname: "/"
 		},
 		{
-			label: "Overlays",
-			symbol: "shield_person",
-			pathname: "/broadcaster/stream"
-		}
+			label: "Commands",
+			symbol: "code_blocks",
+			pathname: "/commands"
+		},
 	] : [{
 			label: "Queue",
 			symbol: "queue_music",
