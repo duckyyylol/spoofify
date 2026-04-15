@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { Text } from "duckylib";
-    import { onMount } from "svelte";
-    import defaultImage from "$lib/assets/favicon.png"
+    import { Column, Row, Text, Typewriter } from "duckylib";
+    import { getContext, onMount } from "svelte";
+    import defaultImage from "$lib/assets/favicon.png";
 
     let nowPlaying: SearchedTrack | null = $state(null);
 
@@ -9,53 +9,114 @@
         return (await (await fetch(`/api/spotify/now-playing`)).json()) || null;
     }
 
+    async function fetchConfig(): Promise<any> {
+        return (await (await fetch(`/api/config`))).json();
+    }
+
     onMount(async () => {
         nowPlaying = await fetchNowPlaying();
-            
+        config = await fetchConfig();
 
         setInterval(async () => {
-            let np = await fetchNowPlaying()
-            if(np && np.id !== nowPlaying?.id) {
+            config = await fetchConfig();
+        },5e2)
+
+        setInterval(async () => {
+            let np = await fetchNowPlaying();
+            
+            if (np && np.id !== nowPlaying?.id) {
                 switching = true;
             }
             setTimeout(() => {
                 switching = false;
                 nowPlaying = np;
-            }, 1e3)
-                
-                
+            }, 1e3);
         }, 10e3);
     });
 
     let switching = $state(false);
 
-
-    let animations: {[key: string]: {in: string; out: string;}} = {
-        "flip": {
+    let animations: { [key: string]: { in: string; out: string } } = {
+        flip: {
             in: "flipIn",
-            out: "flipOut"
+            out: "flipOut",
         },
-        "turn": {
+        turn: {
             in: "turnIn",
-            out: "turnOut"
+            out: "turnOut",
         },
-        "slide": {
+        slide: {
             in: "in",
-            out: "out"
-        }
-    }
+            out: "out",
+        },
+    };
 
-    let animation = $state("turn")
+    let getConfig = $state(() => {
+        if(!config) {
+            return {
+                background_mode: "gradient",
+                animation_style: "slide",
+                color_1: "#9055a1",
+                color_2: "#ae4fc9",
+                shadow_color: "#561269",
+                text_color: "#e7aaff",
+                stroke_color: "#27132c",
+                border_radius: 4,
+                stroke_width: 4,
+                show_album: true
+            }
+        } else return config;
+    })
+
+    let config: any = $state(null);
+
+
+
+    let colorMode: "gradient" | "solid" = $derived(getConfig().background_mode);
+
+    let animation: "flip" | "turn" | "slide" = $derived(getConfig().animation_style);
+
+    let showAlbum = $derived(getConfig().show_album || false);
+
+    let c1: string = $derived(getConfig().color_1);
+    let c2: string = $derived(getConfig().color_2);
+    let sC: string = $derived(getConfig().shadow_color);
+
+    let color1: string = $derived(c1 + "b3");
+    let color2: string = $derived(c2 + "b3");
+    let shadowColor: string = $derived(sC + "b9");
+    let textColor: string = $derived(getConfig().text_color)
+    let strokeColor: string = $derived(getConfig().stroke_color);
+
+    let borderRadiusPx: number = $derived(getConfig().border_radius);
+    let strokeWidthPx: number = $derived(getConfig().stroke_width);
+
+    let borderRadius: string = $derived(`${borderRadiusPx}px`);
+    let strokeWidth: string = $derived(`${strokeWidthPx}px`);
 </script>
 
-<div id="main" class="{switching ? animations[animation].out : animations[animation].in}">
-    <img src={nowPlaying?.imageUrl || defaultImage} alt="" style={nowPlaying?.imageUrl ? "box-shadow: 2px 4px 10.9px 0 var(--shadow);" : ""} />
+<div
+    id="main"
+    class="{switching
+        ? animations[animation].out
+        : animations[animation].in} {colorMode}"
+    style="--color-1: {color1};--color-2: {color2};--text-color: {textColor};--stroke: {strokeColor};--shadow: {shadowColor};--border-radius: {borderRadius};--stroke-width: {strokeWidth};"
+>
+    <img
+        src={nowPlaying?.imageUrl || defaultImage}
+        alt=""
+        style={nowPlaying?.imageUrl
+            ? "box-shadow: 2px 4px 10.9px 0 var(--shadow);"
+            : ""}
+    />
     <div id="details-outer">
         <p id="label">NOW PLAYING</p>
         <div id="details-inner">
             <p id="title">{nowPlaying?.title || "Nothing is Playing"}</p>
             <p id="artist">{nowPlaying?.artist || "Someone in your Dreams"}</p>
+            {#if showAlbum}
             <p id="album">{nowPlaying?.album || "Nobody's Greatest Hits"}</p>
+            {/if}
         </div>
     </div>
 </div>
@@ -70,7 +131,7 @@
     @keyframes slideOut {
         0% {
             opacity: 1;
-            transform: translateX(0)
+            transform: translateX(0);
         }
 
         100% {
@@ -82,7 +143,7 @@
     @keyframes slideIn {
         0% {
             opacity: 0;
-            transform: translateX(-1000px)
+            transform: translateX(-1000px);
         }
 
         100% {
@@ -93,7 +154,7 @@
 
     @keyframes spin {
         0% {
-            transform: rotateX(0)
+            transform: rotateX(0);
         }
 
         100% {
@@ -179,13 +240,13 @@
         animation: 1s spin forwards ease-in-out;
     }
 
-    :root {
-        --purple-1: rgb(144, 85, 161, 0.7);
-        --purple-2: rgb(174, 79, 201, 0.7);
-        --text-pink: #e7aaff;
+    /* :root {
+        --color-1: #9055a1b3;
+        --color-2: #ae4fc9b3;
+        --text-color: #e7aaff;
         --shadow: #561269b9;
         --stroke: #27132c;
-    }
+    } */
 
     div {
         font-family: "Borsok" !important;
@@ -196,13 +257,12 @@
         height: 150px;
         aspect-ratio: 1/1;
 
-        border-radius: 4px;
-        
+        border-radius: var(--border-radius);
     }
 
     #label {
         font-size: 1.33em;
-        color: var(--text-pink);
+        color: var(--text-color);
     }
 
     #title {
@@ -232,7 +292,7 @@
     }
 
     #album {
-        color: var(--text-pink);
+        color: var(--text-color);
         font-size: 1em;
         width: 100%;
 
@@ -244,14 +304,21 @@
         overflow: hidden;
     }
 
-    #main {
-        border-radius: 4px;
-        border: 4px solid var(--stroke);
+    .gradient {
         background: linear-gradient(
             98deg,
-            var(--purple-1) 0%,
-            var(--purple-2) 100%
+            var(--color-1) 0%,
+            var(--color-2) 100%
         );
+    }
+
+    .solid {
+        background-color: var(--color-1);
+    }
+
+    #main {
+        border-radius: var(--border-radius);
+        border: var(--stroke-width) solid var(--stroke);
 
         min-width: 500px;
         width: fit-content;
@@ -266,7 +333,6 @@
         align-items: center;
         justify-content: flex-start;
         gap: 1.33em;
-        
     }
 
     #details-outer {

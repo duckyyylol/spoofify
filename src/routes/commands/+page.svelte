@@ -2,50 +2,56 @@
     import { Markdown } from "duckylib";
 
 </script>
-<Markdown content={`## Glossary   
-> - **Aliases/Alias** - An alternative name for a command. !sr is an alias for !songrequest    
-> - **Arguments **- Text you supply after the main command to influence what the command does. (i.e. /ban <user>, where the <user> argument is the username of the user you are banning)  
+<Markdown widthPercent={100} content={`## Glossary   
+> - **Aliases/Alias** - An alternative name for a command that provides the same functionality. **!sr** is an alias for **!songrequest**    
+> 
+> 
+> - **Arguments **- Text you supply after the main command to influence what the command does. (i.e. /ban &lt;user&gt;, where the &lt;user&gt; argument is the username of the user you are banning)
+> 
+> 
+> - **Placeholders **- Denoted by text _&lt;surrounded in angle brackets&gt;_ placeholders are meant to be **fully replaced** by the intended argument (i.e. &lt;user&gt; becomes @username, not &lt;@username&gt;)
    
    
 ## Commands   
-### !songrequest   
+
+#### \`!songrequest\`   
 > Adds a song to the queue based on a search query.   
 >
-> > - **Aliases: **\`!sr\`, \`!addsong\`, \`!play\`, \`!request\`    
-> > - **Usage: **!songrequest \<song\>   
+> > - **Aliases: ** **!sr**, **!addsong**, **!play**, **!request**    
+> > - **Usage: **!songrequest &lt;song&gt;   
 > > - **Example: **!request hotel california   
    
-### !nowplaying   
+#### \`!nowplaying\`  
 > Displays the current playing track   
 >
-> > - **Aliases: **\`!np\`, \`!song\`, \`!currentsong\`, \`!whatsplaying\` 
+> > - **Aliases: ** **!np**, **!song**, **!currentsong**, **!whatsplaying** 
 > > - **Usage: **!nowplaying   
 > > - **Example: **!np   
    
-### !queue   
+#### \`!queue\`   
 > Displays the size of the track queue   
 >
-> > - **Aliases: **\`!q\`, \`!songlist\`, \`!tracklist\`  
+> > - **Aliases: ** **!q**, **!songlist**, **!tracklist**  
 > > - **Usage: **!queue   
 > > - **Example: **!tracklist   
    
-### !togglesr   
+#### \`!togglesr\`   
 > Toggles the !songrequest command on/off   
 > 
-> > - **Aliases: **\`!togglecommand\`    
+> > - **Aliases: ** **!togglecommand**    
 > > - **Usage: **!togglesr   
 > > - **Example: **!togglecommand   
    
-### !addreward   
+#### \`!addreward\`   
 > Add any channel point redemption as a song request redeem.   
 >
 > > - **Aliases: None**   
 > > - **Usage: **!addreward   
 > > - **Example: **!addreward   
    
-### !removereward   
+#### \`!removereward\`   
 > Remove any channel point redemption as a song request redeem.   
 >
-> > - **Aliases: **\`!delreward\`, \`!remreward\`    
+> > - **Aliases: ** **!delreward**, **!remreward**    
 > > - **Usage: **!removereward   
 > > - **Example: **!delreward`} />

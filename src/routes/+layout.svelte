@@ -25,7 +25,7 @@
 
 {#if page.url.pathname.startsWith("/overlays")}
 	<!-- <Website options={{theme: theme}}> -->
-	<div class="dark" style="background-color: transparent; color: var(--text);">
+	<div class="dark" style="background-color: transparent; color: var(--text); margin: 0; padding: 0; box-sizing: border-box;">
 		{@render children()}
 	</div>
 	<!-- </Website> -->
@@ -51,6 +51,11 @@
 			label: "Queue",
 			symbol: "queue_music",
 			pathname: "/"
+		},
+		{
+			label: "Dashboard",
+			symbol: "settings",
+			pathname: "/dashboard"
 		},
 		{
 			label: "Commands",
