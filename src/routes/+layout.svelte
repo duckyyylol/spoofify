@@ -20,7 +20,7 @@
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
-	<title>Spoofify | {page.url.pathname.includes("overlays") ? "Overlay" : "Queue"}</title>
+	<title>Spoofify{page.url.pathname.includes("overlays") ? " | Overlay" : ""}</title>
 </svelte:head>
 
 {#if page.url.pathname.startsWith("/overlays")}
