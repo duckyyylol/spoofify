@@ -1,8 +1,10 @@
 <script lang="ts">
     import { browser } from "$app/environment";
+    import { PgLineABCBuilder } from "drizzle-orm/pg-core";
     import { Button, Column, getTheme, Heading, HorizontalRule, Markdown, Row, Text } from "duckylib";
     import { onMount } from "svelte";
     import ColorPicker from "svelte-awesome-color-picker";
+    import Select from "svelte-select";
 
     async function fetchConfig(): Promise<any> {
         return (await await fetch(`/api/config`)).json();
@@ -149,6 +151,8 @@
 >
 <Column
     widthPx="fit"
+    textWrap={true}
+    textAlign="left"
     heightPx="fit"
     alignItems="flex-start"
     justifyContent="center"
@@ -156,6 +160,8 @@
     flexWrap={true}
 >
     <Heading size={4} weight="bolder">Backup Options</Heading>
+    <Text sizeEm={0.8} classList={["italic", "yellow"]}>Periodically backing up your settings is a great idea. Always export before making major changes to your configuration.</Text>
+
     <Row widthPx="fill"
     heightPx="fit"
     alignItems="center"
@@ -187,38 +193,25 @@
 </Row>
 </Column>
 <HorizontalRule />
-    <select
-        name="mode"
-        id="mode"
-        bind:value={
-            () => colorMode,
-            (v) => {
-                updateConfig("background_mode", v);
-                colorMode = v;
-            }
-        }
-    >
-        <option value="" disabled>Background Mode</option>
-        <option value="solid">Solid</option>
-        <option value="gradient">Gradient</option>
-    </select>
+    <Text weight="bold">Background Mode</Text>
+    <Text sizeEm={0.8} classList={["italic", "yellow"]}>Whether the background is one solid color, or a gradient</Text>
+    <div class="dark" style="width: 70%;">
+        <Select listAutoWidth={true} items={[{value: "solid", label: "Solid"},{value: "gradient", label: "Gradient"}]} multiple={false} value={colorMode} placeholder="Background Mode" on:change={(e) => {
+            console.log(e.detail.value)
+            updateConfig("background_mode", e.detail.value);
+            colorMode = e.detail.value;
+        }} />
+    </div>
 
-    <select
-        name="anim"
-        id="anim"
-        bind:value={
-            () => animation,
-            (v) => {
-                updateConfig("animation_style", v);
-                animation = v;
-            }
-        }
-    >
-        <option value="" disabled>Animation Style</option>
-        <option value="flip">Flip</option>
-        <option value="slide">Slide</option>
-        <option value="turn">Turn</option>
-    </select>
+    <Text weight="bold">Animation Style</Text>
+    <Text sizeEm={0.8} classList={["italic", "yellow"]}>The style of animation used on song changes</Text>
+    <div class="dark" style="width: 70%;">
+        <Select listAutoWidth={true} items={[{value: "flip", label: "Flip"},{value: "slide", label: "Slide"},{value: "turn", label: "Turn"}]} multiple={false} value={animation} placeholder="Animation Style" on:change={(e) => {
+            console.log(e.detail.value)
+            updateConfig("animation_style", e.detail.value);
+            animation = e.detail.value;
+        }} />
+    </div>
 
     <Column
         widthPx="fit"
@@ -260,6 +253,8 @@
         gapEm={0.5}
     >
         <Text>Border Radius</Text>
+        <Text sizeEm={0.8} classList={["italic", "yellow"]}>The roundness of the corners</Text>
+
         <Row
             widthPx="fit"
             heightPx="fit"
@@ -294,6 +289,7 @@
         gapEm={0.5}
     >
         <Text>Border Width</Text>
+        <Text sizeEm={0.8} classList={["italic", "yellow"]}>How thick is the colored outline</Text>
         <Row
             widthPx="fit"
             heightPx="fit"
@@ -325,6 +321,7 @@
         // backgroundColor={color1}
     >
         <Text>Background Color{colorMode !== "gradient" ? "" : " 1"}</Text>
+        <Text sizeEm={0.8} classList={["italic", "yellow"]}>{colorMode !== "gradient" ? "The main background color" : "The first color of the gradient"}</Text>
         <Row
             widthPx="fit"
             heightPx="fit"
@@ -350,6 +347,7 @@
             // backgroundColor={color2}
         >
             <Text>Background Color 2</Text>
+            <Text sizeEm={0.8} classList={["italic", "yellow"]}>The second color of the gradient</Text>
             <Row
                 widthPx="fit"
                 heightPx="fit"
@@ -375,6 +373,7 @@
         // backgroundColor={strokeColor}
     >
         <Text>Border Color</Text>
+        <Text sizeEm={0.8} classList={["italic", strokeWidthPx === 0 ? "red" : "yellow"]}>{strokeWidthPx === 0 ? "The border is not currently visible" : `The color of the ${strokeWidth} outline`}</Text>
         <Row
             widthPx="fit"
             heightPx="fit"
@@ -401,6 +400,7 @@
     <div style="color: {textColor};">
         <Text weight="black" inheritColor={true}>Accent Text Color</Text>
     </div>
+    <Text sizeEm={0.8} classList={["italic", "yellow"]}>The color of "NOW PLAYING" and the album title</Text>
         <Row
             widthPx="fit"
             heightPx="fit"
@@ -422,9 +422,12 @@
         alignItems="flex-start"
         justifyContent="center"
         gapEm={0.5}
+        marginBottomPx={100}
+
         // backgroundColor={shadowColor}
     >
         <Text>Shadow Color</Text>
+        <Text sizeEm={0.8} classList={["italic", "yellow"]}>The color of the shadow behind the album art</Text>
         <Row
             widthPx="fit"
             heightPx="fit"
@@ -444,6 +447,9 @@
 
 <style>
     .dark {
+
+        /* Color Picker */
+
         --cp-bg-color: var(--crust);
         --cp-border-color: var(--mantle);
         --cp-text-color: var(--text);
@@ -456,5 +462,22 @@
         --slider-width: 0.66em;
         --picker-width: 200px;
         --picker-height: 125px;
+
+
+        /* Select */
+
+        --background: var(--mantle);
+        --border: 2px solid var(--crust);
+        --border-focused: 1px solid var(--accent);
+        --border-hover: 1px solid var(--accent);
+        --border-radius: var(--border-md);
+
+        --list-border: 2px solid var(--crust);
+        --list-background: var(--crust);
+        --item-is-active-bg: var(--accent);
+        --item-hover-bg: var(--green);
+        --item-hover-color: var(--base);
+        
+
     }
 </style>
