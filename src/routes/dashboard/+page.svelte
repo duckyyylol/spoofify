@@ -322,7 +322,7 @@
         alignItems="flex-start"
         justifyContent="center"
         gapEm={0.5}
-        backgroundColor={color1}
+        // backgroundColor={color1}
     >
         <Text>Background Color{colorMode !== "gradient" ? "" : " 1"}</Text>
         <Row
@@ -347,7 +347,7 @@
             alignItems="flex-start"
             justifyContent="center"
             gapEm={0.5}
-            backgroundColor={color2}
+            // backgroundColor={color2}
         >
             <Text>Background Color 2</Text>
             <Row
@@ -372,7 +372,7 @@
         alignItems="flex-start"
         justifyContent="center"
         gapEm={0.5}
-        backgroundColor={strokeColor}
+        // backgroundColor={strokeColor}
     >
         <Text>Border Color</Text>
         <Row
@@ -396,7 +396,7 @@
         alignItems="flex-start"
         justifyContent="center"
         gapEm={0.5}
-        backgroundColor={color1}
+        // backgroundColor={color1}
     >
     <div style="color: {textColor};">
         <Text weight="black" inheritColor={true}>Accent Text Color</Text>
@@ -422,7 +422,7 @@
         alignItems="flex-start"
         justifyContent="center"
         gapEm={0.5}
-        backgroundColor={shadowColor}
+        // backgroundColor={shadowColor}
     >
         <Text>Shadow Color</Text>
         <Row
