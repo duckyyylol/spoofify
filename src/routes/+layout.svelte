@@ -66,6 +66,11 @@
 			label: "Queue",
 			symbol: "queue_music",
 			pathname: "/"
+		},
+		{
+			label: "Commands",
+			symbol: "code_blocks",
+			pathname: "/commands"
 		}]}
  />
 	{@render children()}
