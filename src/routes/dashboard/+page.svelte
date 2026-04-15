@@ -1,7 +1,8 @@
 <script lang="ts">
     import { browser } from "$app/environment";
-    import { Button, Column, Heading, HorizontalRule, Markdown, Row, Text } from "duckylib";
+    import { Button, Column, getTheme, Heading, HorizontalRule, Markdown, Row, Text } from "duckylib";
     import { onMount } from "svelte";
+    import ColorPicker from "svelte-awesome-color-picker";
 
     async function fetchConfig(): Promise<any> {
         return (await await fetch(`/api/config`)).json();
@@ -331,11 +332,12 @@
             justifyContent="flex-start"
             gapEm={0.5}
         >
-            <input type="color" name="co" id="co" bind:value={() => c1, (v) => {
+            <div class="dark">
+                <ColorPicker isAlpha={false} isDark={true} isTextInput={true} textInputModes={["hex"]} label={color1} name="co" bind:hex={() => c1, (v) => {
                 updateConfig("color_1", v.replace("#", "").trim());
                 c1 = v;
             }} />
-            {color1}
+            </div>
         </Row>
     </Column>
     {#if colorMode === "gradient"}
@@ -355,11 +357,12 @@
                 justifyContent="flex-start"
                 gapEm={0.5}
             >
-                <input type="color" name="co2" id="co2" bind:value={() => c2, (v) => {
+                <div class="dark">
+                <ColorPicker isAlpha={false} isDark={true} isTextInput={true} textInputModes={["hex"]} label={color2} name="co2" bind:hex={() => c2, (v) => {
                 updateConfig("color_2", v.replace("#", "").trim());
                 c2 = v;
             }} />
-                {color2}
+            </div>
             </Row>
         </Column>
     {/if}
@@ -379,11 +382,12 @@
             justifyContent="flex-start"
             gapEm={0.5}
         >
-            <input type="color" name="scc" id="scc" bind:value={() => strokeColor, (v) => {
+            <div class="dark">
+                <ColorPicker isAlpha={false} isDark={true} isTextInput={true} textInputModes={["hex"]} label={strokeColor} name="cos" bind:hex={() => strokeColor, (v) => {
                 updateConfig("stroke_color", v.replace("#", "").trim());
                 strokeColor = v;
             }} />
-            {strokeColor}
+            </div>
         </Row>
     </Column>
     <Column
@@ -404,11 +408,12 @@
             justifyContent="flex-start"
             gapEm={0.5}
         >
-            <input type="color" name="tc" id="tc" bind:value={() => textColor, (v) => {
+            <div class="dark">
+                <ColorPicker isAlpha={false} isDark={true} isTextInput={true} textInputModes={["hex"]} label={textColor} name="cot" bind:hex={() => textColor, (v) => {
                 updateConfig("text_color", v.replace("#", "").trim());
                 textColor = v;
             }} />
-            {textColor}
+            </div>
         </Row>
     </Column>
     <Column
@@ -427,19 +432,29 @@
             justifyContent="flex-start"
             gapEm={0.5}
         >
-            <input
-                type="color"
-                name="sc"
-                id="sc"
-                bind:value={() => sC, (v) => {
+            <div class="dark">
+                <ColorPicker isAlpha={false} isDark={true} isTextInput={true} textInputModes={["hex"]} label={shadowColor} name="co" bind:hex={() => sC, (v) => {
                 updateConfig("shadow_color", v.replace("#", "").trim());
                 sC = v;
-            }}
-                onchange={async (e) => {
-                    console.log(e.currentTarget.value);
-                }}
-            />
-            {shadowColor}
+            }} />
+            </div>
         </Row>
     </Column>
 </Column>
+
+<style>
+    .dark {
+        --cp-bg-color: var(--crust);
+        --cp-border-color: var(--mantle);
+        --cp-text-color: var(--text);
+        --cp-input-color: var(--mantle);
+        --cp-button-hover-color: var(--surface-2);
+        --focus-color: var(--accent);
+
+        --picker-indicator-size: 1em;
+        --input-size: 1.33em;
+        --slider-width: 0.66em;
+        --picker-width: 200px;
+        --picker-height: 125px;
+    }
+</style>
