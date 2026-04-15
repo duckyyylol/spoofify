@@ -1,5 +1,5 @@
 <script>
-    import { Markdown } from "duckylib";
+    import { getUserData, Markdown } from "duckylib";
 
 </script>
 <Markdown widthPercent={100} content={`## Glossary   
@@ -35,7 +35,7 @@
 > > - **Usage: **!queue   
 > > - **Example: **!tracklist   
    
-#### \`!togglesr\`   
+${getUserData() !== null ? `#### \`!togglesr\`   
 > Toggles the !songrequest command on/off   
 > 
 > > - **Aliases: ** **!togglecommand**    
@@ -54,4 +54,4 @@
 >
 > > - **Aliases: ** **!delreward**, **!remreward**    
 > > - **Usage: **!removereward   
-> > - **Example: **!delreward`} />
+> > - **Example: **!delreward` : ""}`} />
